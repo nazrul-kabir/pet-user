@@ -16,6 +16,8 @@ public class UserWithPetController {
 
     @GetMapping("/users-with-pet")
     public List<UserWithPet> getUsersWithPet() {
+        // TODO: Add configurable user count parameter
+        // TODO: Add pagination options
         return aggregatorService.getUsersWithPets(100);
     }
 }
