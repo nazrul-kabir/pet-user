@@ -24,7 +24,10 @@ public class UserWithPetAggregatorService {
             } else {
                 user.setPetImage(null);
             }
-            result.add(user);
+            // Exclude users with null/empty id or null petImage
+            if (user.getId() != null && !user.getId().isEmpty() && user.getPetImage() != null) {
+                result.add(user);
+            }
         }
         return result;
     }
