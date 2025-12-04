@@ -1,4 +1,4 @@
-import { User, Country } from '../types';
+import { User, Country, COUNTRIES } from '../types';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
@@ -22,38 +22,15 @@ interface BackendUserResponse {
   petImage: string;
 }
 
-// Country code to name mapping
-const COUNTRY_NAMES: Record<string, string> = {
-  AU: 'Australia',
-  BR: 'Brazil',
-  CA: 'Canada',
-  CH: 'Switzerland',
-  DE: 'Germany',
-  DK: 'Denmark',
-  ES: 'Spain',
-  FI: 'Finland',
-  FR: 'France',
-  GB: 'United Kingdom',
-  IE: 'Ireland',
-  IN: 'India',
-  IR: 'Iran',
-  MX: 'Mexico',
-  NL: 'Netherlands',
-  NO: 'Norway',
-  NZ: 'New Zealand',
-  RS: 'Serbia',
-  SE: 'Sweden',
-  TR: 'Turkey',
-  UA: 'Ukraine',
-  US: 'United States',
-};
-
 // Transform backend response to frontend User format
 const transformUser = (backendUser: BackendUserResponse, index: number): User => {
   const countryCode = backendUser.country.toUpperCase();
-  const country: Country = {
+
+  // Find country from centralized COUNTRIES array
+  const countryData = COUNTRIES.find(c => c.code === countryCode);
+  const country: Country = countryData || {
     code: countryCode,
-    name: COUNTRY_NAMES[countryCode] || countryCode,
+    name: countryCode,
   };
 
   // Convert date to DD/MM/YYYY format
