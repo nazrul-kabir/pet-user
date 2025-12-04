@@ -8,6 +8,7 @@ interface FilterControlsProps {
   countries: Country[];
   onFetchData: () => void;
   loading: boolean;
+  hasParamsChanged: boolean;
 }
 
 const FilterControls: React.FC<FilterControlsProps> = ({
@@ -16,7 +17,8 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   totalUsers,
   countries,
   onFetchData,
-  loading
+  loading,
+  hasParamsChanged
 }) => {
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onFilterChange({
@@ -89,7 +91,8 @@ const FilterControls: React.FC<FilterControlsProps> = ({
           <button
             className="w-full md:w-auto bg-[#161B22] dark:bg-white text-white dark:text-black font-semibold py-2 px-4 rounded-md flex items-center justify-center space-x-2 hover:opacity-90 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             onClick={handleFetchData}
-            disabled={loading}
+            disabled={loading || !hasParamsChanged}
+            title={!hasParamsChanged ? 'No changes to fetch' : 'Fetch data from server'}
           >
             {loading ? (
               <>

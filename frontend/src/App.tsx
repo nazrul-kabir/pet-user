@@ -15,11 +15,23 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Track the last fetched parameters to avoid unnecessary API calls
+  const [lastFetchedParams, setLastFetchedParams] = useState<FilterState | null>(null);
+
   // Display users based on current filter state
   // Note: Country filtering is handled by the backend
   const filteredUsers = useMemo(() => {
     return users.slice(0, filterState.userCount);
   }, [users, filterState.userCount]);
+
+  // Check if current filter state is different from last fetched params
+  const hasParamsChanged = useMemo(() => {
+    if (!lastFetchedParams) return true; // Always allow first fetch
+    return (
+      lastFetchedParams.selectedCountry !== filterState.selectedCountry ||
+      lastFetchedParams.userCount !== filterState.userCount
+    );
+  }, [filterState, lastFetchedParams]);
 
   // Function to fetch data from backend API
   const handleFetchData = async () => {
@@ -32,6 +44,8 @@ const App: React.FC = () => {
         results: filterState.userCount
       });
       setUsers(fetchedUsers);
+      // Update last fetched params after successful fetch
+      setLastFetchedParams({ ...filterState });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch users');
       console.error('Error fetching users:', err);
@@ -68,6 +82,7 @@ const App: React.FC = () => {
           countries={COUNTRIES}
           onFetchData={handleFetchData}
           loading={loading}
+          hasParamsChanged={hasParamsChanged}
         />
 
         {/* Error State */}
