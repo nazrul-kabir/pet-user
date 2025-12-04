@@ -1,5 +1,6 @@
 package com.example.userpet_api.controller;
 
+import com.example.userpet_api.config.Constants;
 import com.example.userpet_api.model.UserWithPet;
 import com.example.userpet_api.service.UserWithPetAggregatorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class UserWithPetController {
 
     @GetMapping("/users-with-pet")
     public List<UserWithPet> getUsersWithPet(
-            @RequestParam(defaultValue = "100") int results,
+            @RequestParam(defaultValue = "" + Constants.DEFAULT_USER_COUNT) int results,
             @RequestParam(required = false) String nat) {
         // TODO: Add pagination options
         // nationality filtering via 'nat' query parameter

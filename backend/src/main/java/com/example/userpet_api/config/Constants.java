@@ -3,7 +3,7 @@ package com.example.userpet_api.config;
 public final class Constants {
     public static final int MIN_USER_COUNT = 1;
     public static final int MAX_USER_COUNT = 1000;
-    public static final int DEFAULT_USER_COUNT = 10;
+    public static final int DEFAULT_USER_COUNT = 50; // Default for API (matches Dog API limit)
     public static final int MAX_VALID_USER_COUNT = 100;
     
     // Fixed seed for consistent user results across API calls
