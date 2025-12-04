@@ -8,7 +8,7 @@ import './App.css';
 const App: React.FC = () => {
   const [filterState, setFilterState] = useState<FilterState>({
     selectedCountry: '',
-    userCount: 100
+    userCount: 50
   });
 
   const [users, setUsers] = useState<User[]>(MOCK_USERS);
@@ -35,8 +35,8 @@ const App: React.FC = () => {
 
     try {
       const fetchedUsers = await fetchUsersWithPets({
-        country: filterState.selectedCountry || undefined,
-        limit: filterState.userCount
+        nat: filterState.selectedCountry || undefined,
+        results: filterState.userCount
       });
       setUsers(fetchedUsers);
     } catch (err) {
