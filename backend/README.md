@@ -15,6 +15,9 @@ The service combines both data sources into a single JSON response containing us
 - 🎯 **REST API Endpoint**: `GET /api/users-with-pet`
 - 🔄 **Data Aggregation**: Combines user data with pet images
 - 🐕 **External API Integration**: Integrates with RandomUser.me and Dog CEO APIs
+- 🌍 **Nationality Filtering**: Filter users by country code (e.g., FI, US, GB)
+- 🎲 **Deterministic Results**: Uses fixed seed for consistent, reproducible data
+- ⚙️ **Configurable Parameters**: Customize result count and nationality
 - ⚡ **Spring Boot**: Built on Spring Boot 4.0.0
 - 🧪 **Basic Testing**: Includes a simple Spring Boot test
 
@@ -64,6 +67,16 @@ The application will start on `http://localhost:8080` by default.
 
 Returns a list of users with their associated pet images.
 
+**Query Parameters:**
+
+| Parameter | Type   | Required | Default | Description                                          |
+|-----------|--------|----------|---------|------------------------------------------------------|
+| `results` | int    | No       | 100     | Number of users to return (1-1000)                   |
+| `nat`     | string | No       | null    | Nationality filter (e.g., FI, US, GB) - see below    |
+
+**Available Nationalities:**
+`AU`, `BR`, `CA`, `CH`, `DE`, `DK`, `ES`, `FI`, `FR`, `GB`, `IE`, `IN`, `IR`, `MX`, `NL`, `NO`, `NZ`, `RS`, `TR`, `UA`, `US`
+
 **Response Format:**
 ```json
 [
@@ -83,14 +96,28 @@ Returns a list of users with their associated pet images.
 ]
 ```
 
-**Parameters:**
-- Returns exactly 100 users by default
-- Each user includes personal information and a random dog image
+**Example Requests:**
 
-**Example Request:**
 ```bash
+# Get 100 users from all nationalities (default)
 curl http://localhost:8080/api/users-with-pet
+
+# Get 20 users from all nationalities
+curl http://localhost:8080/api/users-with-pet?results=20
+
+# Get 20 Finnish users
+curl http://localhost:8080/api/users-with-pet?results=20&nat=FI
+
+# Get 50 American users
+curl http://localhost:8080/api/users-with-pet?results=50&nat=US
+
+# Get 10 British users
+curl http://localhost:8080/api/users-with-pet?results=10&nat=GB
 ```
+
+**Important Notes:**
+- The API uses a **fixed seed** (`aimopark2025`) to ensure consistent, reproducible results
+- Each user is paired with a unique random dog image
 
 ## Project Structure
 
@@ -117,14 +144,36 @@ src/test/java/com/example/userpet_api/
 
 ## Configuration
 
+### External APIs
+
 The application uses the following external APIs:
 
 - **RandomUser API**: `https://randomuser.me/api/`
 - **Dog CEO API**: `https://dog.ceo/api/breeds/image/random/`
 
-These URLs are configured in:
-- `RandomUserServiceImpl.java` - line 14
-- `DogImageServiceImpl.java` - line 13
+### Centralized Configuration
+
+All constants and configuration values are centralized in `config/Constants.java`:
+
+```java
+// User count limits
+MIN_USER_COUNT = 1
+MAX_USER_COUNT = 1000
+DEFAULT_USER_COUNT = 10
+
+// Seed for deterministic results
+FIXED_SEED = "aimopark2025"
+
+// API URLs
+API_URL_RANDOM_USER = "https://randomuser.me/api/?results=%d&seed=%s"
+API_URL_RANDOM_USER_WITH_NAT = "https://randomuser.me/api/?results=%d&seed=%s&nat=%s"
+API_URL_DOG_IMAGE = "https://dog.ceo/api/breeds/image/random/%d"
+```
+
+**To change the seed value:**
+1. Open `src/main/java/com/example/userpet_api/config/Constants.java`
+2. Modify the `FIXED_SEED` constant
+3. Rebuild and restart the app
 
 ## Dependencies
 
@@ -215,13 +264,22 @@ This project is provided as-is for demonstration purposes.
 - Response time depends on external API availability
 - Consider adding caching for production use
 
+## Recent Enhancements
+
+✅ **Implemented:**
+- Configurable user count parameter via `results` query param
+- Nationality filtering via `nat` query param
+- Fixed seed for deterministic, reproducible results
+- Centralized configuration in `Constants.java`
+- Enhanced logging and error handling
+
 ## Future Enhancements
 
 Potential improvements:
-- Add configurable user count parameter
 - Implement caching for external API responses
-- Add more comprehensive error handling and logging
+- Add pagination support (page 1, page 2, etc. with same seed)
 - Include health check endpoints
-- Add pagination support
 - Implement retry mechanisms for external API calls
 - Add metrics and monitoring
+- Support multiple nationalities in a single request (e.g., `nat=FI,US,GB`)
+- Add optional seed parameter to override the fixed seed
