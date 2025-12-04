@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { MOCK_USERS, COUNTRIES, FilterState, User } from './types';
+import { COUNTRIES, FilterState, User } from './types';
 import UserCard from './components/UserCard';
 import FilterControls from './components/FilterControls';
 import { fetchUsersWithPets } from './services/userService';
@@ -11,7 +11,8 @@ const App: React.FC = () => {
     userCount: 50
   });
 
-  const [users, setUsers] = useState<User[]>(MOCK_USERS);
+  // Start with empty array - data loaded from API on mount
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
