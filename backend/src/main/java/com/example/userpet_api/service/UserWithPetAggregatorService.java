@@ -18,19 +18,25 @@ public class UserWithPetAggregatorService {
     private final DogImageService dogImageService;
 
     public List<UserWithPet> getUsersWithPets(int count) {
-        log.debug("Aggregating {} users with pet images", count);
-        
+        // Delegate to overloaded method with no nationality filter
+        return getUsersWithPets(count, null);
+    }
+
+    public List<UserWithPet> getUsersWithPets(int count, String nationality) {
+        log.debug("Aggregating {} users with pet images (nationality: {})", count,
+                nationality != null ? nationality : "all");
+
         // Validate and normalize count
         count = normalizeCount(count);
-        
+
         try {
-            List<UserWithPet> users = randomUserService.fetchRandomUsers(count);
+            List<UserWithPet> users = randomUserService.fetchRandomUsers(count, nationality);
             List<String> images = dogImageService.fetchRandomDogImages(count);
-            
+
             log.debug("Retrieved {} users and {} pet images", users.size(), images.size());
-            
+
             return aggregateUsersWithImages(users, images);
-            
+
         } catch (Exception e) {
             log.error("Error during user-pet aggregation", e);
             throw new RuntimeException("Failed to aggregate users with pet images", e);

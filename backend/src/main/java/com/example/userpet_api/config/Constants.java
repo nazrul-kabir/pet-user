@@ -9,7 +9,11 @@ public final class Constants {
     // Fixed seed for consistent user results across API calls
     public static final String FIXED_SEED = "aimopark2025";
 
+    // Default nationality filter (null means no filter, all nationalities)
+    public static final String DEFAULT_NATIONALITY = null; // No filter by default
+
     public static final String API_URL_RANDOM_USER = "https://randomuser.me/api/?results=%d&seed=%s";
+    public static final String API_URL_RANDOM_USER_WITH_NAT = "https://randomuser.me/api/?results=%d&seed=%s&nat=%s";
     public static final String API_URL_DOG_IMAGE = "https://dog.ceo/api/breeds/image/random/%d";
     
     public static final String ENDPOINT_USERS_WITH_PET = "/api/users-with-pet";

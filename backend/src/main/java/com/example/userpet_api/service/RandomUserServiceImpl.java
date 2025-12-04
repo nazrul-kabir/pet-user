@@ -25,18 +25,33 @@ public class RandomUserServiceImpl implements RandomUserService {
 
     @Override
     public List<UserWithPet> fetchRandomUsers(int count) {
-        log.debug("Fetching {} random users", count);
-        
+        // Delegate to overloaded method with default nationality
+        return fetchRandomUsers(count, Constants.DEFAULT_NATIONALITY);
+    }
+
+    @Override
+    public List<UserWithPet> fetchRandomUsers(int count, String nationality) {
+        log.debug("Fetching {} random users with nationality filter: {}", count,
+                nationality != null ? nationality : "none");
+
         // Validate count parameter
         if (count < Constants.MIN_USER_COUNT || count > Constants.MAX_USER_COUNT) {
-            log.warn("Invalid user count: {}. Must be between {} and {}", 
+            log.warn("Invalid user count: {}. Must be between {} and {}",
                     count, Constants.MIN_USER_COUNT, Constants.MAX_USER_COUNT);
             count = Constants.DEFAULT_USER_COUNT;
         }
-        
+
         try {
-            // Using fixed seed to ensure consistent results
-            String url = String.format(Constants.API_URL_RANDOM_USER, count, Constants.FIXED_SEED);
+            // Build URL with or without nationality filter
+            String url;
+            if (nationality != null && !nationality.trim().isEmpty()) {
+                // Using fixed seed with nationality filter for consistent results
+                url = String.format(Constants.API_URL_RANDOM_USER_WITH_NAT,
+                        count, Constants.FIXED_SEED, nationality.toUpperCase());
+            } else {
+                // Using fixed seed without nationality filter
+                url = String.format(Constants.API_URL_RANDOM_USER, count, Constants.FIXED_SEED);
+            }
             log.debug("Calling RandomUser API with URL: {}", url);
             String response = restTemplate.getForObject(url, String.class);
             
