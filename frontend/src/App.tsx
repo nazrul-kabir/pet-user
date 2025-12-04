@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { MOCK_USERS, COUNTRIES, FilterState, User } from './types';
 import UserCard from './components/UserCard';
 import FilterControls from './components/FilterControls';
@@ -34,7 +34,8 @@ const App: React.FC = () => {
   }, [filterState, lastFetchedParams]);
 
   // Function to fetch data from backend API
-  const handleFetchData = async () => {
+  // Wrapped in useCallback to prevent unnecessary re-creation
+  const handleFetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -52,7 +53,12 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterState]); // Recreate only when filterState changes
+
+  // Auto-fetch data on component mount
+  useEffect(() => {
+    handleFetchData();
+  }, [handleFetchData]); // Safe to include now that it's memoized
 
   return (
     <div className="font-display bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark">
