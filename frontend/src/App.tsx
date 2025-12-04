@@ -15,18 +15,11 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Filter and slice users based on current filter state
+  // Display users based on current filter state
+  // Note: Country filtering is handled by the backend
   const filteredUsers = useMemo(() => {
-    let filteredData = users;
-
-    // Filter by country if selected
-    if (filterState.selectedCountry) {
-      filteredData = filteredData.filter(user => user.countryCode === filterState.selectedCountry);
-    }
-
-    // Limit number of users
-    return filteredData.slice(0, filterState.userCount);
-  }, [users, filterState]);
+    return users.slice(0, filterState.userCount);
+  }, [users, filterState.userCount]);
 
   // Function to fetch data from backend API
   const handleFetchData = async () => {

@@ -50,13 +50,13 @@ const FilterControls: React.FC<FilterControlsProps> = ({
           >
             Filter by Country
           </label>
-          <select 
-            className="w-full rounded-md border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary text-text-primary-light dark:text-text-primary-dark transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-500 appearance-none pr-8 focus:outline-none shadow-sm" 
+          <select
+            className="w-full rounded-md border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary text-text-primary-light dark:text-text-primary-dark transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-500 appearance-none pr-8 focus:outline-none shadow-sm"
             id="country"
             value={filterState.selectedCountry}
             onChange={handleCountryChange}
           >
-            <option>All Countries</option>
+            <option value="">All Countries</option>
             {countries.map((country) => (
               <option key={country.code} value={country.code}>
                 {country.name}
