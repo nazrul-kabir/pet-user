@@ -54,9 +54,8 @@ public class RandomUserServiceImpl implements RandomUserService {
             }
             log.debug("Calling RandomUser API with URL: {}", url);
             String response = restTemplate.getForObject(url, String.class);
-            
+
             if (response == null) {
-                // TODO: Handle null response from RandomUser API
                 log.warn("Received null response from RandomUser API");
                 return List.of();
             }
