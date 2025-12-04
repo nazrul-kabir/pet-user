@@ -74,6 +74,8 @@ Returns a list of users with their associated pet images.
 | `results` | int    | No       | 50      | Number of users to return (1-1000)                   |
 | `nat`     | string | No       | null    | Nationality filter (e.g., FI, US, GB) - see below    |
 
+**Important Limitation:** The Dog CEO API has a maximum limit of 50 images per request. While the `results` parameter accepts values from 1 to 1000, requests exceeding 50 will only return 50 users with pet images due to this external API constraint.
+
 **Available Nationalities:**
 `AU`, `BR`, `CA`, `CH`, `DE`, `DK`, `ES`, `FI`, `FR`, `GB`, `IE`, `IN`, `IR`, `MX`, `NL`, `NO`, `NZ`, `RS`, `TR`, `UA`, `US`
 

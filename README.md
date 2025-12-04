@@ -126,6 +126,8 @@ curl http://localhost:8080/api/users-with-pet?results=50&nat=US
 | `results` | int    | 50      | Number of users (1-1000)          |
 | `nat`     | string | null    | Country code (e.g., FI, US, GB)   |
 
+**Important Note:** Due to Dog CEO API limitations, requests for more than 50 users will only return 50 users with pet images. While the `results` parameter accepts values up to 1000, the actual number of users returned is capped at 50 due to the external API constraint.
+
 ### Supported Countries
 
 `AU`, `BR`, `CA`, `CH`, `DE`, `DK`, `ES`, `FI`, `FR`, `GB`, `IE`, `IN`, `IR`, `MX`, `NL`, `NO`, `NZ`, `RS`, `TR`, `UA`, `US`
