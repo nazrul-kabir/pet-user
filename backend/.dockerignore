@@ -1,0 +1,9 @@
+target/
+.mvn/
+.vscode/
+*.md
+.git
+.gitignore
+.gitattributes
+*.log
+*.tmp
