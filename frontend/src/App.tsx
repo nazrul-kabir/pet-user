@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { MOCK_USERS, COUNTRIES, FilterState } from './types';
+import { MOCK_USERS, COUNTRIES, FilterState, User } from './types';
 import UserCard from './components/UserCard';
 import FilterControls from './components/FilterControls';
+import { fetchUsersWithPets } from './services/userService';
 import './App.css';
 
 const App: React.FC = () => {
@@ -10,18 +11,41 @@ const App: React.FC = () => {
     userCount: 100
   });
 
+  const [users, setUsers] = useState<User[]>(MOCK_USERS);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   // Filter and slice users based on current filter state
   const filteredUsers = useMemo(() => {
-    let users = MOCK_USERS;
-    
+    let filteredData = users;
+
     // Filter by country if selected
     if (filterState.selectedCountry) {
-      users = users.filter(user => user.countryCode === filterState.selectedCountry);
+      filteredData = filteredData.filter(user => user.countryCode === filterState.selectedCountry);
     }
-    
+
     // Limit number of users
-    return users.slice(0, filterState.userCount);
-  }, [filterState]);
+    return filteredData.slice(0, filterState.userCount);
+  }, [users, filterState]);
+
+  // Function to fetch data from backend API
+  const handleFetchData = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const fetchedUsers = await fetchUsersWithPets({
+        country: filterState.selectedCountry || undefined,
+        limit: filterState.userCount
+      });
+      setUsers(fetchedUsers);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+      console.error('Error fetching users:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="font-display bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark">
@@ -47,24 +71,50 @@ const App: React.FC = () => {
         <FilterControls
           filterState={filterState}
           onFilterChange={setFilterState}
-          totalUsers={MOCK_USERS.length}
+          totalUsers={users.length}
           countries={COUNTRIES}
+          onFetchData={handleFetchData}
+          loading={loading}
         />
 
-        {/* User Grid */}
-        <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredUsers.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </main>
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-8">
+            <div className="flex items-center space-x-2">
+              <span className="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
+              <p className="text-red-800 dark:text-red-300 font-medium">
+                {error}
+              </p>
+            </div>
+          </div>
+        )}
 
-        {/* Empty State */}
-        {filteredUsers.length === 0 && (
+        {/* Loading State */}
+        {loading ? (
           <div className="text-center py-12">
-            <p className="text-text-secondary-light dark:text-text-secondary-dark text-lg">
-              No users found for the selected criteria.
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <p className="text-text-secondary-light dark:text-text-secondary-dark text-lg mt-4">
+              Loading users...
             </p>
           </div>
+        ) : (
+          <>
+            {/* User Grid */}
+            <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredUsers.map((user) => (
+                <UserCard key={user.id} user={user} />
+              ))}
+            </main>
+
+            {/* Empty State */}
+            {filteredUsers.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-text-secondary-light dark:text-text-secondary-dark text-lg">
+                  No users found for the selected criteria.
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -6,13 +6,17 @@ interface FilterControlsProps {
   onFilterChange: (newFilter: FilterState) => void;
   totalUsers: number;
   countries: Country[];
+  onFetchData: () => void;
+  loading: boolean;
 }
 
 const FilterControls: React.FC<FilterControlsProps> = ({
   filterState,
   onFilterChange,
   totalUsers,
-  countries
+  countries,
+  onFetchData,
+  loading
 }) => {
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onFilterChange({
@@ -30,7 +34,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   };
 
   const handleFetchData = () => {
-    console.log('Fetch data clicked', filterState);
+    onFetchData();
   };
 
   const displayedCount = Math.min(filterState.userCount, totalUsers);
@@ -47,7 +51,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
             Filter by Country
           </label>
           <select 
-            className="w-full rounded-md border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary text-text-primary-light dark:text-text-primary-dark transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-500" 
+            className="w-full rounded-md border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary focus:border-primary text-text-primary-light dark:text-text-primary-dark transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-500 appearance-none pr-8 focus:outline-none shadow-sm" 
             id="country"
             value={filterState.selectedCountry}
             onChange={handleCountryChange}
@@ -82,12 +86,22 @@ const FilterControls: React.FC<FilterControlsProps> = ({
 
         {/* Action Button */}
         <div className="lg:col-span-2 flex items-center justify-between md:justify-start space-x-4">
-          <button 
-            className="w-full md:w-auto bg-[#161B22] dark:bg-white text-white dark:text-black font-semibold py-2 px-4 rounded-md flex items-center justify-center space-x-2 hover:opacity-90 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg"
+          <button
+            className="w-full md:w-auto bg-[#161B22] dark:bg-white text-white dark:text-black font-semibold py-2 px-4 rounded-md flex items-center justify-center space-x-2 hover:opacity-90 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             onClick={handleFetchData}
+            disabled={loading}
           >
-            <span className="material-symbols-outlined text-base">download</span>
-            <span>Fetch Data</span>
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white dark:border-black"></div>
+                <span>Loading...</span>
+              </>
+            ) : (
+              <>
+                <span className="material-symbols-outlined text-base">download</span>
+                <span>Fetch Data</span>
+              </>
+            )}
           </button>
           <p className="text-sm text-text-secondary-light dark:text-text-secondary-dark shrink-0">
             Showing <span className="font-semibold text-text-primary-light dark:text-text-primary-dark">{displayedCount}</span> users
