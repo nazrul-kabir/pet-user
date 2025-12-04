@@ -200,13 +200,108 @@ The service includes basic error handling:
 
 ## Testing
 
-Run the tests with:
+The project includes comprehensive test coverage for all components.
 
-```bash
-./mvnw test
+### Test Structure
+
+```
+src/test/java/com/example/userpet_api/
+├── UserpetApiApplicationTests.java         # Application context test
+├── controller/
+│   └── UserWithPetControllerTest.java      # Controller integration tests
+└── service/
+    ├── DogImageServiceImplTest.java        # Dog API service tests
+    ├── RandomUserServiceImplTest.java      # User API service tests
+    └── UserWithPetAggregatorServiceTest.java # Aggregation logic tests
 ```
 
-The project includes a basic Spring Boot context loading test.
+### Running Tests
+
+```bash
+# Run all tests
+./mvnw test
+
+# Run tests with verbose output
+./mvnw test -X
+
+# Run specific test class
+./mvnw test -Dtest=UserWithPetControllerTest
+
+# Run tests and generate coverage report
+./mvnw test jacoco:report
+```
+
+### Test Coverage
+
+#### Service Tests
+
+1. **DogImageServiceImplTest** - Tests dog image fetching:
+   - Valid count returns correct number of images
+   - Single image fetch works
+   - Maximum limit (50 images) handling
+   - Zero/invalid count handling
+   - Randomness verification
+
+2. **RandomUserServiceImplTest** - Tests user data fetching:
+   - Valid count returns users with proper structure
+   - Nationality filtering works correctly
+   - Fixed seed returns consistent results
+   - Invalid count normalization (too low/high)
+   - User validation (filters invalid users)
+   - Multiple nationalities support
+
+3. **UserWithPetAggregatorServiceTest** - Tests aggregation logic:
+   - Successful aggregation of users and pet images
+   - Nationality filter is passed through
+   - Handles mismatched user/image counts
+   - Count normalization (min/max boundaries)
+   - Empty list handling
+   - Data preservation during aggregation
+
+#### Controller Tests
+
+**UserWithPetControllerTest** - Integration tests for REST API:
+- Default parameters (50 users, no filter)
+- Custom result count parameter
+- Nationality filtering parameter
+- Combined parameters (results + nat)
+- Edge cases (1 user, 50 users, 100+ users)
+- Response structure validation
+- CORS configuration verification
+- Empty result handling
+
+### Test Requirements
+
+**Prerequisites:**
+- JDK 17 or higher (not JRE)
+- Maven 3.6+
+- Internet connection (for integration tests calling external APIs)
+
+**Note:** Some tests make real API calls to verify integration. Ensure you have internet connectivity when running the full test suite.
+
+### Writing New Tests
+
+When adding new features, follow the existing test patterns:
+- Use JUnit 5 (`@Test`, `@BeforeEach`)
+- Use Mockito for unit tests (`@Mock`, `@InjectMocks`)
+- Use Spring Boot Test for integration tests (`@WebMvcTest`, `@MockBean`)
+- Follow AAA pattern: Arrange, Act, Assert
+- Include descriptive test names
+
+Example:
+```java
+@Test
+void testMethodName_WithCondition_ShouldExpectedBehavior() {
+    // Arrange
+    // ... setup
+
+    // Act
+    // ... execute
+
+    // Assert
+    // ... verify
+}
+```
 
 ## Development
 

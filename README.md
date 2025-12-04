@@ -292,12 +292,38 @@ The frontend connects to the backend API. If running locally with custom ports, 
 
 ## Testing
 
+The project includes comprehensive test coverage for the backend API.
+
 ### Backend Tests
+
+The backend has extensive unit and integration tests covering:
+- Service layer (DogImageService, RandomUserService, UserWithPetAggregatorService)
+- Controller layer (REST API endpoints)
+- Data validation and aggregation logic
+- Edge cases and error handling
 
 ```bash
 cd backend
+
+# Run all tests
 ./mvnw test
+
+# Run specific test class
+./mvnw test -Dtest=UserWithPetControllerTest
+
+# Run with verbose output
+./mvnw test -X
 ```
+
+**Test Coverage:**
+- **DogImageServiceImplTest**: Dog API integration (5 tests)
+- **RandomUserServiceImplTest**: User API integration (10 tests)
+- **UserWithPetAggregatorServiceTest**: Aggregation logic (10 tests)
+- **UserWithPetControllerTest**: REST API endpoints (12 tests)
+
+**Prerequisites:** JDK 17+ (not JRE), Maven 3.6+, internet connection
+
+For detailed testing documentation, see [backend/README.md Testing Section](backend/README.md#testing).
 
 ### Frontend Tests
 
