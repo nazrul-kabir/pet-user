@@ -35,7 +35,9 @@ public class RandomUserServiceImpl implements RandomUserService {
         }
         
         try {
-            String url = String.format(Constants.API_URL_RANDOM_USER, count);
+            // Using fixed seed to ensure consistent results
+            String url = String.format(Constants.API_URL_RANDOM_USER, count, Constants.FIXED_SEED);
+            log.debug("Calling RandomUser API with URL: {}", url);
             String response = restTemplate.getForObject(url, String.class);
             
             if (response == null) {
