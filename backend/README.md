@@ -71,7 +71,7 @@ Returns a list of users with their associated pet images.
 
 | Parameter | Type   | Required | Default | Description                                          |
 |-----------|--------|----------|---------|------------------------------------------------------|
-| `results` | int    | No       | 100     | Number of users to return (1-1000)                   |
+| `results` | int    | No       | 50      | Number of users to return (1-1000)                   |
 | `nat`     | string | No       | null    | Nationality filter (e.g., FI, US, GB) - see below    |
 
 **Available Nationalities:**
@@ -99,7 +99,7 @@ Returns a list of users with their associated pet images.
 **Example Requests:**
 
 ```bash
-# Get 100 users from all nationalities (default)
+# Get 50 users from all nationalities (default)
 curl http://localhost:8080/api/users-with-pet
 
 # Get 20 users from all nationalities
@@ -159,7 +159,7 @@ All constants and configuration values are centralized in `config/Constants.java
 // User count limits
 MIN_USER_COUNT = 1
 MAX_USER_COUNT = 1000
-DEFAULT_USER_COUNT = 10
+DEFAULT_USER_COUNT = 50  // Default for API endpoint (matches Dog API limit)
 
 // Seed for deterministic results
 FIXED_SEED = "aimopark2025"
