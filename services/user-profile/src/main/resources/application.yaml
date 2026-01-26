@@ -1,3 +1,31 @@
+server:
+  port: 8081  # keeping different from original monolith if running side-by-side
+  shutdown: graceful
+
 spring:
   application:
     name: user-profile
+  main:
+    banner-mode: off
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus  # actuator basics
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.dietideas: DEBUG
+    org.springframework.web: INFO
