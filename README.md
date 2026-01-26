@@ -156,18 +156,14 @@ curl http://localhost:8080/api/users-with-pet?results=50&nat=US
 
 ```
 pet-user/
-├── backend/                 # Java Spring Boot API
-│   ├── src/
-│   │   ├── main/java/
-│   │   │   └── com/example/userpet_api/
-│   │   │       ├── controller/      # REST controllers
-│   │   │       ├── service/         # Business logic
-│   │   │       ├── model/           # Data models
-│   │   │       └── config/          # Configuration
-│   │   └── resources/
-│   ├── pom.xml
-│   ├── Dockerfile
-│   └── README.md           # Backend documentation
+├── pom.xml                           # parent pom with <modules>
+├── services/
+│   ├── user-profile/
+│   │   ├── pom.xml
+│   │   └── src/main/java/com/example/userprofile/
+│   ├── pet-image/
+│   │   ├── pom.xml
+│   │   └── src/main/java/com/example/petimage/
 │
 ├── frontend/               # React TypeScript SPA
 │   ├── src/
@@ -177,9 +173,9 @@ pet-user/
 │   ├── Dockerfile
 │   ├── nginx.conf
 │   └── README.md          # Frontend documentation
-│
-├── docker-compose.yml     # Docker orchestration
-├── DOCKER.md             # Docker deployment guide
+├── infrastructure/
+│   ├── docker-compose.local.yml      # spin up both services + frontend
+│   └── ...
 └── README.md             # This file
 ```
 
