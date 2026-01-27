@@ -1,0 +1,33 @@
+# Production configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    probes:
+      enabled: true
+
+# Logging configuration
+logging:
+  level:
+    com.example.userprofile: INFO
+    org.springframework.web: WARN
+    org.springframework.boot.actuator: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# WebClient configuration
+spring:
+  webflux:
+    webclient:
+      max-in-memory-size: 10MB

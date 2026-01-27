@@ -1,0 +1,39 @@
+# Use Maven image for building the application
+FROM maven:3.9.4-eclipse-temurin-17 AS builder
+
+WORKDIR /app
+
+# Copy pom.xml first for better layer caching
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy source and build
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Use minimal runtime image
+FROM eclipse-temurin:17-jre-alpine
+
+WORKDIR /app
+
+# Create app user
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+# Copy JAR and set permissions
+COPY --from=builder /app/target/user-profile-*.jar app.jar
+RUN chown appuser:appgroup app.jar
+
+# Switch to non-root user
+USER appuser
+
+EXPOSE 8080
+
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
+ENV SPRING_PROFILES_ACTIVE=prod
+
+# Simple health check using Java (no curl needed)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

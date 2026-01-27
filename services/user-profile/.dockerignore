@@ -1,0 +1,40 @@
+# Maven
+target/
+!target/*.jar
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.*
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
