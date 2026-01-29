@@ -11,13 +11,13 @@ public class UserService {
 
     private final WebClient webClient;
     private static final String RANDOM_USER_URL = "https://randomuser.me/api/";
-    private static final String FIXED_SEED = "dietideas";  // like your original seed
+    private static final String FIXED_SEED = "aimopark2025";
 
     public UserService(WebClient.Builder builder) {
         this.webClient = builder.baseUrl(RANDOM_USER_URL).build();
     }
 
-public List<UserDto> getUsers(int results, String nat) {
+    public List<UserDto> getUsers(int results, String nat) {
         // Validate params (boring but production-grade)
         final int finalResults = (results < 1 || results > 100) ? 10 : results;  // cap low for free-tier
         final String finalNat = (nat == null || nat.isBlank()) ? "fi" : nat;

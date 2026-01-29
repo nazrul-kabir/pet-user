@@ -27,5 +27,5 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
     root: INFO
-    com.dietideas: DEBUG
+    com.example: DEBUG
     org.springframework.web: INFO

@@ -43,9 +43,9 @@ EXPOSE 8080
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 ENV SPRING_PROFILES_ACTIVE=prod
 
-# Use built-in Java health check instead of curl (more reliable)
+# Use curl to check the health endpoint (recommended for running containers)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD java -jar app.jar --management.health.probes.enabled=true || exit 1
+    CMD curl -f http://localhost:8080/actuator/health || exit 1
 
 # Run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
