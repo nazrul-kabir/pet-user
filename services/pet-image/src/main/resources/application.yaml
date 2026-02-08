@@ -1,0 +1,23 @@
+server:
+  port: 8082
+  shutdown: graceful
+
+spring:
+  application:
+    name: pet-image
+  main:
+    banner-mode: off
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.dietideas: DEBUG
